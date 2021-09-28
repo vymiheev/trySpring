@@ -52,7 +52,9 @@ public class CustomersController {
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<Void> modifyCustomer(@PathVariable String customerId) {
-        //todo check customerId is valid UUID
+        if (isNotValidUUID(customerId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Customer> optionalCustomer = customerRepository.findById(UUID.fromString(customerId));
         if (optionalCustomer.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -68,6 +70,9 @@ public class CustomersController {
     @GetMapping("/customers/{customerId}")
     public @ResponseBody
     ResponseEntity<Customer> getCustomerById(@PathVariable String customerId) {
+        if (isNotValidUUID(customerId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Customer> optionalCustomer = customerRepository.findById(UUID.fromString(customerId));
         if (optionalCustomer.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -82,6 +87,9 @@ public class CustomersController {
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<Void> removeCustomerById(@PathVariable String customerId) {
+        if (isNotValidUUID(customerId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Customer> optionalCustomer = customerRepository.findById(UUID.fromString(customerId));
         if (optionalCustomer.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -100,6 +108,9 @@ public class CustomersController {
     @GetMapping("/customers/{customerId}/products")
     public @ResponseBody
     ResponseEntity<List<Product>> getCustomersProducts(@PathVariable String customerId) {
+        if (isNotValidUUID(customerId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Customer> optionalCustomer = customerRepository.findById(UUID.fromString(customerId));
         if (optionalCustomer.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -115,6 +126,9 @@ public class CustomersController {
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<Product> createNewProduct(@PathVariable String customerId) {
+        if (isNotValidUUID(customerId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Customer> optionalCustomer = customerRepository.findById(UUID.fromString(customerId));
         if (optionalCustomer.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -136,6 +150,9 @@ public class CustomersController {
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<Void> removeProductById(@PathVariable String productId) {
+        if (isNotValidUUID(productId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Product> optionalProduct = productRepository.findById(UUID.fromString(productId));
         if (optionalProduct.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -152,6 +169,9 @@ public class CustomersController {
     @GetMapping("/products/{productId}")
     public @ResponseBody
     ResponseEntity<Product> getProductById(@PathVariable String productId) {
+        if (isNotValidUUID(productId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Product> optionalProduct = productRepository.findById(UUID.fromString(productId));
         if (optionalProduct.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -166,6 +186,9 @@ public class CustomersController {
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<Product> modifyProduct(@PathVariable String productId) {
+        if (isNotValidUUID(productId)) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Product> optionalProduct = productRepository.findById(UUID.fromString(productId));
         if (optionalProduct.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -176,5 +199,16 @@ public class CustomersController {
         optionalProduct.get().setModifiedAt(Instant.now());
         productRepository.save(optionalProduct.get());
         return ResponseEntity.noContent().build();
+    }
+
+
+    private boolean isNotValidUUID(String customerId) {
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            UUID.fromString(customerId);
+        } catch (IllegalArgumentException exception) {
+            return true;
+        }
+        return false;
     }
 }

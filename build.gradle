@@ -23,9 +23,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web:2.5.4'
 	implementation 'junit:junit:4.13.1'
 	implementation 'org.jetbrains:annotations:20.1.0'
-	//implementation 'io.jsonwebtoken:jjwt:0.2'
-	//implementation 'io.jsonwebtoken:jjwt-api:0.10.2'
-
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2',
 			'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
