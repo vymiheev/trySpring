@@ -1,5 +1,8 @@
-package com.example.appsmart.security;
+package com.example.appsmart.converter;
 
+import com.example.appsmart.Configuration;
+import com.example.appsmart.security.roles.UserPrincipal;
+import com.example.appsmart.security.roles.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -12,15 +15,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
-public class TokenServiceImpl implements TokenService {
-    private static final String JWT_SECRET = "DOBC3LqiM8Kw3vyveblj6GCW3M1HKihlxa__YKXdFpg";
+public class JwtTokenConverter implements TokenService {
 
     @Override
     public String generateToken(UserRole user) {
         Instant expirationTime = Instant.now().plus(1, ChronoUnit.HOURS);
         Date expirationDate = Date.from(expirationTime);
 
-        Key key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
+        Key key = Keys.hmacShaKeyFor(Configuration.JWT_SECRET.getBytes());
 
         String compactTokenString = Jwts.builder()
                 .claim("id", user.getId())
@@ -34,12 +36,12 @@ public class TokenServiceImpl implements TokenService {
     }
 
     public static void main(String[] args) {
-        System.out.println(new TokenServiceImpl().generateToken(new UserRole(1, "username", "password", true)));
+        System.out.println(new JwtTokenConverter().generateToken(new UserRole(1, "", "", true)));
     }
 
     @Override
     public UserPrincipal parseToken(String token) {
-        byte[] secretBytes = JWT_SECRET.getBytes();
+        byte[] secretBytes = Configuration.JWT_SECRET.getBytes();
 
         Jws<Claims> jwsClaims;
         jwsClaims = Jwts.parserBuilder()

@@ -1,16 +1,18 @@
-package com.example.appsmart.models;
+package com.example.appsmart.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product extends CommonEntity {
+public final class Product extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
@@ -32,9 +34,17 @@ public class Product extends CommonEntity {
     public Product() {
     }
 
-    public Product(@NotNull UUID id, @NotNull Boolean isDeleted, @NotNull String title,
-                   @Nullable String description, @NotNull BigDecimal price) {
-        super(id, isDeleted);
+    public Product(@NotNull Instant createdAt, @NotNull String title, @Nullable String description,
+                   @NotNull BigDecimal price) {
+        super(createdAt);
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
+
+    @TestOnly
+    public Product(@NotNull UUID id, @NotNull String title, @Nullable String description, @NotNull BigDecimal price) {
+        super(id);
         this.title = title;
         this.description = description;
         this.price = price;

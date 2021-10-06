@@ -1,8 +1,8 @@
 package com.example.appsmart;
 
-import com.example.appsmart.handlers.CustomersController;
-import com.example.appsmart.security.TokenService;
-import com.example.appsmart.security.UserRole;
+import com.example.appsmart.controller.CustomerController;
+import com.example.appsmart.converter.TokenService;
+import com.example.appsmart.security.roles.UserRole;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         locations = "classpath:application-test.properties")
 public class SecurityTest {
     @Autowired
-    private CustomersController controller;
+    private CustomerController controller;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -73,7 +73,7 @@ public class SecurityTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/customers/988025e7-32c8-4a9c-a578-ff09681c8931")
                         .header("Authorization", adminToken))
-                .andDo(print()).andExpect(status().isOk())
+                .andDo(print()).andExpect(status().isNoContent())
                 .andExpect(content().string(notNullValue()));
 
         //...

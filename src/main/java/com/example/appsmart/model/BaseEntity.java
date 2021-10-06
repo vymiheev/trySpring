@@ -1,19 +1,19 @@
-package com.example.appsmart.models;
+package com.example.appsmart.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
-public abstract class CommonEntity {
+public abstract class BaseEntity {
     @Id
     @Column(name = "id", nullable = false)
     @NotNull
@@ -30,12 +30,16 @@ public abstract class CommonEntity {
     @Nullable
     private Instant modifiedAt;
 
-    public CommonEntity() {
+    public BaseEntity() {
     }
 
-    public CommonEntity(@NotNull UUID id, @NotNull Boolean isDeleted) {
+    @TestOnly
+    public BaseEntity(@NotNull UUID id) {
         this.id = id;
-        this.isDeleted = isDeleted;
+    }
+
+    public BaseEntity(@NotNull Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public @NotNull UUID getId() {
@@ -74,7 +78,7 @@ public abstract class CommonEntity {
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CommonEntity that = (CommonEntity) o;
+        BaseEntity that = (BaseEntity) o;
         return id.equals(that.id);
     }
 

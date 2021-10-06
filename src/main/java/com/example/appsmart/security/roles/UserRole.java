@@ -1,4 +1,4 @@
-package com.example.appsmart.security;
+package com.example.appsmart.security.roles;
 
 import java.util.Objects;
 

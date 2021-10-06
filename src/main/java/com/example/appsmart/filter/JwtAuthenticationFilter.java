@@ -1,7 +1,7 @@
-package com.example.appsmart.handlers;
+package com.example.appsmart.filter;
 
-import com.example.appsmart.security.TokenService;
-import com.example.appsmart.security.UserPrincipal;
+import com.example.appsmart.converter.TokenService;
+import com.example.appsmart.security.roles.UserPrincipal;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    public static final String BEARER_PREFIX = "Bearer ";
     private final TokenService tokenService;
 
     public JwtAuthenticationFilter(TokenService tokenService) {
@@ -43,10 +44,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean authorizationHeaderIsInvalid(String authorizationHeader) {
         return authorizationHeader == null
-                || !authorizationHeader.startsWith("Bearer ");
+                || !authorizationHeader.startsWith(BEARER_PREFIX);
     }
 
-    private UsernamePasswordAuthenticationToken createToken(String authorizationHeader) {
+    private UsernamePasswordAuthenticationToken createToken(@NotNull String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");
         UserPrincipal userPrincipal = tokenService.parseToken(token);
 

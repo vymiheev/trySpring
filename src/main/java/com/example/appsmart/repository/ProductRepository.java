@@ -1,6 +1,6 @@
-package com.example.appsmart.dao;
+package com.example.appsmart.repository;
 
-import com.example.appsmart.models.Product;
+import com.example.appsmart.model.Product;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
